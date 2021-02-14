@@ -6,8 +6,6 @@ import viteTestPlugin from 'vite-plugin-test'
 export default defineConfig({
   plugins: [
     vue(),
-    viteTestPlugin({ 
-      watch: true 
-    })
+    viteTestPlugin()
   ]
 })

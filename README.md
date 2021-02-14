@@ -11,7 +11,7 @@ Example Code
 ------------
 * `npm install`
 * `npm run build`
-* `cd example`
+* `cd examples/vue`
 * `npm test`
 
 Plugin usage
