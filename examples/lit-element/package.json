@@ -20,8 +20,9 @@
   "homepage": "https://github.com/aelbore/vite-plugin-test#readme",
   "devDependencies": {
     "@open-wc/testing": "^2.5.32",
-    "aria-mocha": "^0.7.1",
+    "lit-element": "^2.4.0",
     "puppeteer": "^7.0.1",
+    "vite-plugin-test": "^0.0.3",
     "vite": "^2.0.0-beta.65"
   }
 }

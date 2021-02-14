@@ -1,6 +1,6 @@
 # vite-plugin-test
 Vite plugin with mocha and puppeteer \
-Test your vue, react and lit-element component
+Headless test your `Vue`, `React` and `Lit-Element` component
 
 Installation
 ------------
@@ -42,7 +42,8 @@ export interface TestPluginOptions {
 
 * `dir`     - [default: 'tests'] directory where the test or spec files
 * `watch`   - [default: false] enable/diable watch
-* `loaders` - when you have a `.js` test files with `jsx` or `tsx` code (Please see `./examples/react/vite.config.test.ts`)
+* `loaders` - when you have a `.js` test files with `jsx` or `tsx` code \
+  (Please see `./examples/react/vite.config.test.ts`)
   ```
   loaders: {
     '.spec.js': 'jsx'

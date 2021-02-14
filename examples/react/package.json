@@ -18,13 +18,14 @@
     "url": "https://github.com/aelbore/vite-plugin-test/issues"
   },
   "homepage": "https://github.com/aelbore/vite-plugin-test#readme",
+  "dependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^1.1.4",
-    "@vue/compiler-sfc": "^3.0.5",
-    "@vue/test-utils": "2.0.0-rc.0",
-    "aria-mocha": "^0.7.1",
+    "@vitejs/plugin-react-refresh": "^1.1.0",
+    "vite-plugin-test": "^0.0.3",
     "puppeteer": "^7.0.1",
-    "vite": "^2.0.0-beta.65",
-    "vue": "^3.0.5"
+    "vite": "^2.0.0-beta.65"
   }
 }
