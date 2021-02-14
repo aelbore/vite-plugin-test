@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-test",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Vite plugin with puppeteer, mocha and vue-test-utils",
   "scripts": {
     "build": "aria-build -d"
