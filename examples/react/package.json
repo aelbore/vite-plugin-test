@@ -1,0 +1,30 @@
+{
+  "name": "vite-plugin-test",
+  "version": "0.0.1",
+  "description": "Vite plugin with puppeteer, mocha and vue-test-utils",
+  "main": "index.js",
+  "scripts": {
+    "serve": "vite",
+    "test": "vite --config vite.config.test.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aelbore/vite-plugin-test.git"
+  },
+  "keywords": [],
+  "author": "Arjay Elbore <aelbore.sg@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aelbore/vite-plugin-test/issues"
+  },
+  "homepage": "https://github.com/aelbore/vite-plugin-test#readme",
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^1.1.4",
+    "@vue/compiler-sfc": "^3.0.5",
+    "@vue/test-utils": "2.0.0-rc.0",
+    "aria-mocha": "^0.7.1",
+    "puppeteer": "^7.0.1",
+    "vite": "^2.0.0-beta.65",
+    "vue": "^3.0.5"
+  }
+}

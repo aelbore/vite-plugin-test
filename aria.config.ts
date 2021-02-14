@@ -10,7 +10,8 @@ export default defineConfig({
         await Promise.all([
           symlinkDir('./dist', './node_modules/vite-plugin-test'),
           symlinkDir('./node_modules', './examples/vue/node_modules'),
-          symlinkDir('./node_modules', './examples/lit-element/node_modules')
+          symlinkDir('./node_modules', './examples/lit-element/node_modules'),
+          symlinkDir('./node_modules', './examples/react/node_modules')
         ])
       }
     }

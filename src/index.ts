@@ -1,8 +1,12 @@
 import { Plugin, ViteDevServer } from 'vite'
 import { getTestFiles, launch } from 'aria-mocha'
+import { transformSync, Loader } from 'esbuild'
+ 
 import { IncomingMessage, ServerResponse } from 'http'
 import { AddressInfo } from 'net'
-import { Stats } from 'fs'
+import { Stats, existsSync } from 'fs'
+import path from 'path'
+
 
 async function launchHeadless({ hostname, port, path, watch }) {
   await launch(createUrl({ hostname, port, path }))
@@ -11,13 +15,27 @@ async function launchHeadless({ hostname, port, path, watch }) {
 
 const createUrl = ({ port, hostname, path }) => `http://${hostname}:${port}/${path}`
 
+const getExt = (str: string) => {
+  const basename = path.basename(str);
+  const firstDot = basename.indexOf('.');
+  const lastDot = basename.lastIndexOf('.');
+  const extname = path.extname(basename).replace(/(\.[a-z0-9]+).*/i, '$1');
+
+  if (firstDot === lastDot) return extname
+
+  return basename.slice(firstDot, lastDot) + extname
+}
+
 export interface TestPluginOptions {
   dir?: string
   watch?: boolean
+  loaders?: {
+    [ext: string]: Loader
+  }
 }
 
 export default function viteTestPlugin(options?: TestPluginOptions) {
-  let { dir = 'tests', watch = false } = (options || {})
+  let { dir = 'tests', watch = false, loaders } = (options || {})
   
   let port = 3000
   let hostname = 'localhost'
@@ -27,7 +45,7 @@ export default function viteTestPlugin(options?: TestPluginOptions) {
     name: 'vite-plugin-test',
     configureServer(server: ViteDevServer) {
       server.middlewares.use('/test-files', async (_req: IncomingMessage, res: ServerResponse, _next: Function) => {
-        const files = await getTestFiles(`${dir}/**/*.spec.js`, true)
+        const files = existsSync(dir) ? await getTestFiles(`${dir}/**/*.spec.js`, true): []
         res.writeHead(200, {
           'Content-type': 'application/json'
         })
@@ -46,6 +64,26 @@ export default function viteTestPlugin(options?: TestPluginOptions) {
 
         await launchHeadless({ hostname, port, watch, path: indexPath })
       })
+    },
+    transform(code: string, id: string) {
+      const ext = getExt(id)
+      if (loaders && Object.keys(loaders).includes(ext)) {
+        const loader = options?.loaders && options?.loaders[ext] 
+          ? options.loaders[ext]  
+          : path.extname(id).slice(1) as Loader
+
+        const result = transformSync(code, {
+          loader,
+          format: 'esm',
+          sourcemap: false,
+          target: 'es2017'
+        })
+
+        return {
+          code: result.code
+        }
+      }
+      return { code }
     }
   }
 
