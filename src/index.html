@@ -1,0 +1,103 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Test</title>
+  <link href="/node_modules/mocha/mocha.css" rel="stylesheet"/>
+  <script src="/node_modules/chai/chai.js"></script>
+  <script src="/node_modules/mocha/mocha.js"></script>
+  <style>
+    #meta > * {
+      margin: 20px 50px 0 50px;
+      font-weight: 200;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    #meta > h1 { font-size: 2em; }
+    #meta > h2 { font-size: 1.5em; }
+
+    #app {
+      margin: 20px 50px 0 50px;
+    }
+  </style>
+  <script>
+    mocha.setup('bdd')
+    mocha.timeout(5000)
+    window.expect = chai.expect
+    window.assert = chai.assert
+  </script>
+</head>
+  <body>
+    <div id="meta">
+      <h2>Mocha HTML Reporter (<a href="https://mochajs.org/#reporting">link</a>)</h2>
+      <div>
+        <div id="mocha" style="margin: 0;"></div>
+      </div>
+      <hr/>
+      <h2>Current Spec</h2>
+    </div>
+    <div id="app"></div>
+    <script type="module">
+      (async function() {
+        beforeEach(() => {
+          delete window["__VUE_DEVTOOLS_TOAST__"]
+
+          const existingRoot = document.getElementById('root')
+          if (existingRoot) {
+            existingRoot.innerHTML = ''
+            return
+          }
+          const root = document.createElement('div')
+          root.id = 'root'
+          document.body.appendChild(root)
+        })
+
+        async function getSpecsToRun(dir) {
+          const testDir = dir ?? 'test'
+          const params = new URLSearchParams((document.location.href.split('?'))[1])
+
+          // ?spec=App.spec.js
+          // ?specs=Foo.spec.js,App.spec.js
+          // ?run=App.spec.js
+          const specParams =
+          params.getAll('spec') ||
+          params.getAll('run') ||
+          params.getAll('specs')
+
+          const allSpecs = specParams.reduce((acc, curr) => {
+            return acc.concat(curr.split(',').map(p => `${testDir}/${p}`))
+          }, [])
+
+          const specs = (allSpecs.length) 
+              ? await Promise.resolve(allSpecs)
+              : await fetch('/test-files').then(r => r.json())
+          
+          return specs
+        }
+
+        async function setup() {  
+          delete window['__VUE_DEVTOOLS_TOAST__']
+
+          const importFile = (file) => import(/* @vite-ignore */ `../../${file}`)
+
+          const specsNames = async () =>  {
+            const specs = await getSpecsToRun()
+            return specs.map(specName => importFile(specName))
+          }
+
+          const specs = await specsNames()
+          await Promise.all(specs)
+
+          const run = () => {
+            mocha.setup({ reporter: 'spec' })
+            mocha.checkLeaks()
+            mocha.run()
+          }
+
+          return { run }
+        }
+
+        await setup().then(s => s.run())
+      })()
+    </script>
+  </body>
+</html>
