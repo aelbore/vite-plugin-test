@@ -1,22 +1,18 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { shallow, configure } from 'enzyme'
+
 import App from '../src/App'
+
+import Adapter from 'enzyme-adapter-react-16';
+configure({ adapter: new Adapter() });
 
 describe('App.jsx', () => {
 
-  beforeEach(() => {
-    const app = document.querySelector('div#app')
-    ReactDOM.render(<App />, app)
-  })
-
-  afterEach(() => {
-    const app = document.querySelector('div#app')
-    app.firstElementChild.remove()
-  })
-
   it('renders', () => {
-    const app = document.querySelector('#app')
-    expect(app.querySelector('p').innerHTML).equal('You clicked 0 times')
+    const wrapper = shallow(<App />)
+    const p = wrapper.find('p')
+
+    expect(p.text()).equal('You clicked 0 times')
   })
 
 })
