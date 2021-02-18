@@ -73,4 +73,3 @@ export default defineConfig({
 TODO
 ------------
 * Code Coverage
-* Typescript spec files
